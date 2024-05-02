@@ -2,8 +2,11 @@ import os
 candidati = ['Pippo', 'Pluto', 'Paperino']
 
 def clearConsole():
-    command = "cls"
-    os.system(command)
+    print("############################")
+    print()
+    print()
+    #command = "clear"
+    #os.system(command)
 
 def nuova_operazione():
     clearConsole()
@@ -22,17 +25,19 @@ class Persona(object):
 
     # constructor of the class
     def __init__(self, nome='Privacy please'):
-        self.name = nome
+        self.nome = nome
+        self.xy = '' # l'attributo xy della classe persona conterrà il cod. fisc.
         self.voto = ''
 
-    def set_voto(self, preferenza):
+    def effettua_votazione(self, preferenza):
         self.voto = preferenza
 
-    def get_name(self):
-        return self.name
+    def come_si_chiama(self):
+        return self.nome
 
-    def get_voto(self):
+    def cosa_ha_votato(self):
         return self.voto
+
 
 
 def inserisci_scelta():
@@ -75,24 +80,26 @@ comando = nuova_operazione()
 lista_votanti = []
 while comando != 'q':
     if comando == "1":
+        # NUOVA VOTAZIONE
         nome_persona = input("chi sta votando? [invio per anonimato]")
         if len(nome_persona)>0:
             nuovo_oggetto_persona = Persona(nome_persona)
         else:
             nuovo_oggetto_persona = Persona()
         scelta_personale = inserisci_scelta()
-        nuovo_oggetto_persona.set_voto(scelta_personale)
+        nuovo_oggetto_persona.effettua_votazione(scelta_personale)
         lista_votanti.append(nuovo_oggetto_persona)
-    if comando == "2":
+    elif comando == "2":
+        # VEDI LISTA VOTANTI
         print("Numero votanti: "+str(len(lista_votanti)))
         for persona in lista_votanti:
             print("---> "+str(persona.get_name()))
     if comando == "3":
         [voti_validi, voti_nulli, astenuti] = calcola_statistiche(lista_votanti)
-        print("Numero registrati: " +str(len(lista_votanti)))
-        print("Numero voti validi: " +str(voti_validi))
-        print("Numero voti nulli: " +str(voti_nulli))
-        print("Numero astenuti: " +str(astenuti))
+        print("Numero registrati: "+str(len(lista_votanti)))
+        print("Numero voti validi: "+str(voti_validi))
+        print("Numero voti nulli: "+str(voti_nulli))
+        print("Numero astenuti: " + str(astenuti))
     if comando == "4":
         vincitore = nomina_vincitore(lista_votanti)
         print("Vincitore: " + str(vincitore))

@@ -1,7 +1,7 @@
 '''
-Dati n numeri interi calcolare
-il massimo, il minimo e
-stamparlo a video usando OOP
+Date due coordinate genera una
+lista di coordinate con x y assegnandoli il nome
+e trovare il massimo delle x e il massimo delle y
 '''
 
 class Punto(object):
