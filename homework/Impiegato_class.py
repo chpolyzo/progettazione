@@ -19,65 +19,97 @@ class Impiegato(object):
         return self.stipendio * 1.1
 
     def stampa_dettagli(self):
-        print(self.nome)
-        print(self.cognome)
-        print(self.matricola)
-        print(self.stipendio)
+        print("Nome: {0}".format(self.nome))
+        print("Cognome: {0}".format(self.cognome))
+        print("Matricola: {0}".format(self.matricola))
+        print("Stipendio: {0}".format(self.stipendio))
 
 
 def comando_menu():
     comandi = {
-        0: "Scegli un'operazione:",
-        1: "Aggiungi impiegato: 1",
-        2: "Aumenta stipendio di tutti: 2",
-        3: "Aumenta stipendio singolo: 3",
-        4: "Stampa lista impiegati: 4",
-        5: "Esci: 5"
+        "Scegli un'operazione:": '',
+        "Aggiungi impiegato": '- 1',
+        "Aumenta stipendio di tutti": '- 2',
+        "Aumenta stipendio singolo": '- 3',
+        "Stampa lista impiegati": '- 4',
+        "Esci": '- 5'
     }
-    for c in comandi:
-        print(comandi.get(c))
+    for v, k in comandi.items():
+        print(v, k)
 
-    comando = input("Inserisci ora il comando:")
+    comando = input("\nInserisci ora il comando:\n")
     return comando
+
+def aggiungi_impiegato(lista_impiegati):
+    nome = input("Inserisci nome:")
+    cognome = input("Inserisci cognome:")
+    matricola = input("Inserisci matricola:")
+    stipendio = int(input("Inserisci stipendio:"))
+    oggetto = Impiegato()
+    oggetto.set_dettagli(nome, cognome, matricola, stipendio)
+    oggetto.get_dettagli()
+    print("\nHai inserito i seguenti dati:")
+    oggetto.stampa_dettagli()
+    lista_impiegati.append(oggetto)
+    print("La lista impiegati adesso è {0}\n".format(lista_impiegati))
+    return oggetto
+
+def aumenta_tutti_stipendi(lista_impiegati):
+    for impiegato in lista_impiegati:
+        impiegato.aumenta_stipendio()
+        print("Lo stipendio ora è {0}:".format(impiegato.aumenta_stipendio()))
+
+
+def trova_e_aumenta(impiegato, lista_impiegati):
+    matricola = input("Cerca matricola:")
+    print(lista_impiegati)
+    try:
+        print("La matricole è {}".format(impiegato.matricola) if impiegato.matricola == matricola)
+        impiegato.aumenta_stipendio()
+        print("Stipendio Aumentato\n")
+    except ValueError:
+        print("L'utente cercato non esiste")
+
+def stampa_lista(lista_impiegati):
+    for impiegato in lista_impiegati:
+        impiegato.stampa_dettagli()
+
+def salva_lista_in_file(lista_impiegati):
+    with open("impiegati.txt", "wb") as f:
+        for i_object in lista_impiegati:
+            pickle.dump(i_object, f)
+            print("Oggetto salvato correttamente")
+
+def appendi_file_impiegati(impiegato, lista_impiegati):
+    with open("impiegati.txt", "rb") as f:
+        lista_impiegati.append(impiegato)
+
+def crea_file_se_non_esiste(file_path):
+    try:
+        with open(file_path, "a+") as file:
+            pass  # file esistente
+    except FileNotFoundError:
+        with open(file_path, "w+") as file:
+            pass  # crea file
+
+import pickle
+file_path = './impiegati.txt'
 
 
 lista_impiegati = []
+crea_file_se_non_esiste(file_path)
 comando = comando_menu()
+dict_funzioni = {"1":aggiungi_impiegato,
+                 "2":aumenta_tutti_stipendi,
+                 "4":stampa_lista}
 while comando != "5":
-    if comando == "1":
-        # aggiungi impiegato
-        nome = input("Inserisci nome:")
-        cognome = input("Inserisci cognome:")
-        matricola = input("Inserisci matricola:")
-        stipendio = int(input("Inserisci stipendio:"))
-        oggetto = Impiegato()
-        oggetto.set_dettagli(nome, cognome, matricola, stipendio)
-        oggetto.get_dettagli()
-        print("\nHai inserito i seguenti dati:")
-        oggetto.stampa_dettagli()
-        print("\n")
-        lista_impiegati.append(oggetto)
-    elif comando == "2":
-        # aumenta tutti gli stipendi
-        for elemento in lista_impiegati:
-            elemento.aumenta_stipendio()
-    elif comando == "3":
-        # aumenta uno stipendio
-        matricola = input("Cerca matricola:")
-        trovato = False
-        for elemento in lista_impiegati:
-            if elemento.matricola == matricola:
-                elemento.aumenta_stipendio()
-                trovato = True
-        if not trovato:
-            print("L'utente cercato non esiste")
-        else:
-            print("Aumentato")
-    elif comando == "4":
-        # stampa lista
-        for elemento in lista_impiegati:
-            elemento.stampa_dettagli()
-    else:
+    funzione_selezionata = dict_funzioni.get(comando)
+    try:
+        funzione_selezionata
+        funzione_selezionata(lista_impiegati)
+    except:
+        trova_e_aumenta(oggetto, lista_impiegati)
+    finally:
         print("Inserisci un comando valido")
+    salva_lista_in_file(lista_impiegati)
     comando = comando_menu()
-print("Programma terminato")
