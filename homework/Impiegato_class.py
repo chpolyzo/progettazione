@@ -16,7 +16,8 @@ class Impiegato(object):
         return self.nome, self.cognome, self.matricola, self.stipendio
 
     def aumenta_stipendio(self):
-        return self.stipendio * 1.1
+        self.stipendio = self.stipendio * 1.1
+        return self.stipendio
 
     def stampa_dettagli(self):
         print("Nome: {0}".format(self.nome))
@@ -56,16 +57,20 @@ def aggiungi_impiegato(lista_impiegati):
 
 def aumenta_tutti_stipendi(lista_impiegati):
     for impiegato in lista_impiegati:
-        impiegato.aumenta_stipendio()
-        print("Lo stipendio ora è {0}:".format(impiegato.aumenta_stipendio()))
+        #impiegato.aumenta_stipendio() # setter se faccio il setter
+        print("Lo stipendio ora è {0}:".format(impiegato.aumenta_stipendio())) # nel print sarebbe meglio usare un getter
 
 
-def trova_e_aumenta(impiegato, lista_impiegati):
+def trova_e_aumenta(lista_impiegati):
     matricola = input("Cerca matricola:")
-    print(lista_impiegati)
+
+
     try:
-        print("La matricole è {}".format(impiegato.matricola) if impiegato.matricola == matricola)
-        impiegato.aumenta_stipendio()
+        for impiegato in lista_impiegati:
+            if impiegato.matricola == matricola:
+                #impiegato.aumenta_stipendio() #sbagliato perchè faccio la stessa cosa due volte anche nel print sotto
+                print("La matricole è {}".format(impiegato.matricola))
+
         print("Stipendio Aumentato\n")
     except ValueError:
         print("L'utente cercato non esiste")
