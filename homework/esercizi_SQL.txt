@@ -1,0 +1,63 @@
+SELECT nome, titolo, dipartimento
+	FROM Impiegato
+	WHERE titolo LIKE 'ing%'
+
+--------------------------------
+
+SELECT nome, titolo, salario
+	FROM Impiegato
+	WHERE titolo = 'Programmatore' AND 'salario' >= 50000
+
+--------------------------------
+
+SELECT DISTINCT eta
+	FROM  Impiegato
+
+--------------------------------
+
+SELECT titolo, avg(salario)
+	FROM Impiegato
+	WHERE titolo LIKE 'Ing%'
+
+--------------------------------
+
+SELECT *
+	FROM Impiegati
+	WHERE nome NOT IN ('Hermandez', 'Jones', 'Roberts', 'Ruiz')
+
+--------------------------------
+
+SELECT dipartimento, max(stipendio)
+	FROM Impiegato
+	GROUP BY dipartimento
+
+--------------------------------
+
+SELECT dipartimento, max(stipendio)
+	FROM Impiegato
+	GROUP BY dipartimento
+	HAVING stipendio > 20000 
+
+---------------------------------
+
+SELECT città , NumPiste
+	FROM Aeroporto
+	WHERE NumPiste IS NULL
+
+---------------------------------
+
+SELECT DISTINCT Volo.CittàPart,
+	FROM Aeroporto as Partenza
+	JOIN Volo 
+	ON Aeroporto.CittàPart = Volo.Città
+	JOIN Aeroporto as Destinazione
+	ON Aeroporto.CittàArr = Volo.Città
+
+	WHERE Partenza.nazione <> Destinazione.nazione
+
+
+
+
+	
+
+
